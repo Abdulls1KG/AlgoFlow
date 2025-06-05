@@ -1,12 +1,9 @@
-// Registration form handler
 if (document.getElementById('registerForm')) {
   document.getElementById('registerForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const username =
-     document.getElementById('username').value;
+    const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    // Password strength check (keeps your existing logic)
     const strength = checkPasswordStrength(password);
     document.getElementById('strength').textContent = 'Password Strength: ' + strength;
     if (strength === "Weak") {
@@ -14,28 +11,24 @@ if (document.getElementById('registerForm')) {
       return;
     }
 
-    // Enhanced registration request
     try {
-      const response = await fetch('/register', {
+      const res = await fetch('/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
-        credentials: 'include' // 👈 Required for sessions
+        credentials: 'include'
       });
 
-      if (response.ok) {
-        window.location.href = '/dashboard'; // Client-side redirect
+      if (res.ok) {
+        window.location.href = '/dashboard';
       } else {
-        const error = await response.text();
-        alert(`Registration failed: ${error}`);
+        alert(await res.text());
       }
     } catch (err) {
-      alert("Network error - please try again");
-      console.error(err);
+      alert("Network error");
     }
   });
 }
-
     const res = await fetch('/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -68,7 +61,8 @@ if (document.getElementById('loginForm')) {
     const res = await fetch('/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ username, password }),
+      credentials: 'include'
     });
 
     if (res.ok) {
@@ -78,7 +72,6 @@ if (document.getElementById('loginForm')) {
     }
   });
 }
-
 // Password strength checker remains the same
 function checkPasswordStrength(pw) {
   let score = 0;
@@ -88,3 +81,14 @@ function checkPasswordStrength(pw) {
   if (/[^A-Za-z0-9]/.test(pw)) score++;
   return score >= 3 ? "Strong" : "Weak";
 }
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  const user = users[username];
+  if (!user) return res.status(400).send("User not found");
+
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) return res.status(400).send("Incorrect password");
+
+  req.session.user = username;
+  res.status(200).send("Logged in");
+});
