@@ -25,10 +25,11 @@ app.post('/register', async (req, res) => {
     const hashed = await bcrypt.hash(password, 10);
     users[username] = { password: hashed };
     req.session.user = username;
-    res.redirect('/dashboard');
+    res.status(200).send("Registered");
   } catch (err) {
     res.status(500).send("Registration error");
   }
+  console.log(users);
 });
 
 // Dashboard (protected)
@@ -45,6 +46,12 @@ app.get('/login', (req, res) => {
 // Logout
 app.post('/logout', (req, res) => {
   req.session.destroy(() => res.redirect('/login'));
+});
+
+// Send current user to client (for dashboard)
+app.get('/getUser', (req, res) => {
+  if (!req.session.user) return res.status(401).json({ user: null });
+  res.json({ user: req.session.user });
 });
 
 // Fallback
