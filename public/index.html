@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure Web App - Register</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container card">
+    <h1>Register</h1>
+    <form id="registerForm">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Create your username" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Create your password" required />
+      <p id="strength">Password Strength: </p>
+      <button type="submit">Register Now</button>
+      <button type="button" id="toLoginBtn">Move to Login</button>
+    </form>
+  </div>
+  <script>
+    document.getElementById('toLoginBtn').addEventListener('click', () => {
+      window.location.href = 'login.html'; // change to your login page URL
+    });
+    
+    </script> 
+  <script src="script.js"></script>
+</body>
+</html>

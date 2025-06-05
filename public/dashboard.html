@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js"></script>
+</head>
+<body>
+  <div class="container card">
+    <h1>Welcome to your dashboard <span id="usernameDisplay"></span>!</h1>
+    <p>This page is only accessible after logging in.</p>
+    <form id="logoutForm">
+        <button type="submit">Login</button>
+      </form>
+      
+      <script>
+        document.getElementById('logoutForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          await fetch('/logout', { method: 'POST' });
+          window.location.href = 'login.html';
+        });
+      </script>
+  </div>
+
+  <script>
+    // Display username from session
+    fetch('/getUser')
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          document.getElementById('usernameDisplay').textContent = data.user;
+        }
+      });
+  </script>
+  
+</body>
+</html>
