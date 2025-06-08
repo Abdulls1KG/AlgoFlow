@@ -1,94 +1,79 @@
-if (document.getElementById('registerForm')) {
-  document.getElementById('registerForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+// Register Form
+document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
 
-    const strength = checkPasswordStrength(password);
-    document.getElementById('strength').textContent = 'Password Strength: ' + strength;
-    if (strength === "Weak") {
-      alert("Choose a stronger password!");
-      return;
-    }
-
-    try {
-      const res = await fetch('/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-        credentials: 'include'
-      });
-
-      if (res.ok) {
-        window.location.href = '/dashboard';
-      } else {
-        alert(await res.text());
-      }
-    } catch (err) {
-      alert("Network error");
-    }
-  });
-}
-    const res = await fetch('/register', {
+  try {
+    const response = await fetch('/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
     });
 
-    if (res.ok) {
-      // After successful registration, automatically log in
-      const loginRes = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-
-      if (loginRes.ok) {
-        window.location.href = '/dashboard';
-      }
+    const data = await response.json();
+    if (response.ok) {
+      window.location.href = 'dashboard.html';
     } else {
-      alert(await res.text());
-    };
+      alert(data.error || 'Registration failed');
+    }
+  } catch (err) {
+    alert('Network error');
+  }
+});
 
+// Login Form
+document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
 
-// Login form handler
-if (document.getElementById('loginForm')) {
-  document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    const res = await fetch('/login', {
+  try {
+    const response = await fetch('/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-      credentials: 'include'
+      body: JSON.stringify({ username, password })
     });
 
-    if (res.ok) {
-      window.location.href = '/dashboard';
+    const data = await response.json();
+    if (response.ok) {
+      window.location.href = 'dashboard.html';
     } else {
-      alert(await res.text());
+      alert(data.error || 'Login failed');
     }
-  });
-}
-// Password strength checker remains the same
-function checkPasswordStrength(pw) {
-  let score = 0;
-  if (pw.length > 6) score++;
-  if (/[A-Z]/.test(pw)) score++;
-  if (/\d/.test(pw)) score++;
-  if (/[^A-Za-z0-9]/.test(pw)) score++;
-  return score >= 3 ? "Strong" : "Weak";
-}
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  const user = users[username];
-  if (!user) return res.status(400).send("User not found");
+  } catch (err) {
+    alert('Network error');
+  }
+});
 
-  const match = await bcrypt.compare(password, user.password);
-  if (!match) return res.status(400).send("Incorrect password");
+// Dashboard - Check authentication
+if (window.location.pathname.includes('dashboard.html')) {
+  checkAuth();
+}
 
-  req.session.user = username;
-  res.status(200).send("Logged in");
+async function checkAuth() {
+  try {
+    const response = await fetch('/getUser');
+    if (!response.ok) {
+      window.location.href = 'login.html';
+      return;
+    }
+    const data = await response.json();
+    if (data.user) {
+      document.getElementById('usernameDisplay').textContent = data.user;
+    }
+  } catch (err) {
+    window.location.href = 'login.html';
+  }
+}
+
+// Logout
+document.getElementById('logoutForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    await fetch('/logout', { method: 'POST' });
+    window.location.href = 'login.html';
+  } catch (err) {
+    alert('Logout failed');
+  }
 });

@@ -23,12 +23,21 @@
 
         // Display username from session
         fetch('/getUser')
-          .then(res => res.json())
-          .then(data => {
-          if (data.user) {
-            document.getElementById('usernameDisplay').textContent = data.user;
-        }
-      });
+          .then(res => {
+            if (!res.ok) {
+              window.location.href = 'login.html';
+              return;
+            }
+      return res.json();
+    })
+    .then(data => {
+      if (data?.user) {
+        document.getElementById('usernameDisplay').textContent = data.user;
+      }
+    })
+    .catch(() => {
+      window.location.href = 'login.html';
+    });
       </script>
 </body>
 </html>
