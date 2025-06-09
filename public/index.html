@@ -10,16 +10,22 @@
   <div class="container card">
     <h1>Register</h1>
     <form id="registerForm">
+      <label for="username">Email Address</label>
+      <input type="text" id="Email"placeholder="Type Your Email" required />
+      <small id="emailError" class="error-message"></small>
+
       <label for="username">Username</label>
       <input type="text" id="username" placeholder="Create your username" required />
 
       <label for="password">Password</label>
       <input type="password" id="password" placeholder="Create your password" required />
+
       <p id="strength">Password Strength: </p>
+      <p class="password-tip">Tip: Use uppercase, numbers, and special characters</p>
       <button type="submit">Register Now</button>
       <button type="button" id="toLoginBtn">Move to Login</button>
+     
     </form>
-  </div>
   <script>
     document.getElementById('toLoginBtn').addEventListener('click', () => {
       window.location.href = 'login.html'; // change to your login page URL

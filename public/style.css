@@ -167,3 +167,138 @@ body::before {
 .auth-switch button:hover {
   color: var(--business-blue);
 }
+
+/* Dashboard Specific Styles */
+.dashboard-content {
+  margin: 2rem 0;
+}
+
+.stats-card {
+  background: var(--highlight);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.action-btn {
+  flex: 1;
+  background: var(--accent);
+  transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.logout-btn {
+  margin-top: 2rem;
+  background: var(--error);
+}
+
+.auth-notice {
+  text-align: center;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+/* Password Strength Indicator */
+#strength {
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  padding: 0.3rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+/* Color coding for strength levels */
+#strength .weak { color: red; }
+#strength .normal { color: goldenrod; }
+#strength .strong { color: limegreen; }
+#strength .very-strong { color: darkgreen; }
+
+.password-tip {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+.error-message {
+  color: var(--error);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: none;
+}
+
+input:invalid {
+  border-color: var(--error);
+}
+
+:root {
+  /* Light Theme (default) */
+  --bg: #f5f7fa;
+  --fg: #333;
+  --card-bg: #ffffff;
+  --input-border: #ccc;
+  --highlight: #e6f0ff;
+  --error: #d9534f;
+  --accent: #0a74da;
+}
+
+[data-theme="dark"] {
+  /* Dark Theme */
+  --bg: #1a1a1a;
+  --fg: #f0f0f0;
+  --card-bg: #2d2d2d;
+  --input-border: #555;
+  --highlight: #3a3a3a;
+  --error: #ff6b6b;
+  --accent: #3399ff;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.theme-switch-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+#themeToggle {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+#themeToggle:hover {
+  transform: scale(1.1);
+  background: var(--highlight);
+}
+.error-message {
+  color: var(--error);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: none;
+}
+
+input:invalid {
+  border-color: var(--error);
+}

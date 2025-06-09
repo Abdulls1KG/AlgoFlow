@@ -1,43 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>User Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container card">
-    <h1>Welcome to your dashboard <span id="usernameDisplay"></span>!</h1>
-    <p>This page is only accessible after logging in.</p>
-    <form id="logoutForm">
-        <button type="submit">Logout</button>
-      </form>
-  </div>
-      <script>
-        document.getElementById('logoutForm').addEventListener('submit', async (e) => {
-          e.preventDefault();
-          await fetch('/logout', { method: 'POST' });
-          window.location.href = 'login.html';
-        });
+    <h1>Welcome back <span id="usernameDisplay"></span>!</h1>
+    
+    <div class="dashboard-content">
+      <div class="stats-card">
+        <h3>Your Stats</h3>
+        <div class="stat-item">
+          <span>Last Login:</span>
+          <span id="lastLogin">Just now</span>
+          <span></span>
+        </div>
+      </div>
 
-        // Display username from session
-        fetch('/getUser')
-          .then(res => {
-            if (!res.ok) {
-              window.location.href = 'login.html';
-              return;
-            }
-      return res.json();
-    })
-    .then(data => {
-      if (data?.user) {
-        document.getElementById('usernameDisplay').textContent = data.user;
-      }
-    })
-    .catch(() => {
-      window.location.href = 'login.html';
-    });
-      </script>
+      <div class="quick-actions">
+        <button class="action-btn">View Profile</button>
+        <button class="action-btn">Settings</button>
+      </div>
+    </div>
+    
+    <p class="auth-notice">🔒 This page is protected - only logged-in users can see it</p>
+    
+    <form id="logoutForm">
+      <button type="submit" class="logout-btn">Logout</button>
+    </form>
+  </div>
+  
+  <script src="script.js"></script>
 </body>
+
 </html>
